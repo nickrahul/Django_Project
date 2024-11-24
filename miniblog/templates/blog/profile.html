@@ -1,0 +1,30 @@
+
+{% extends "blog/base.html" %}
+
+{% block msg %}
+{% if messages %}
+    {% for msg in messages %}
+        <p {% if msg.tags %} class='alert alert-{{msg.tags}} mb-2' {% endif %}>{{msg}}</p>
+    {% endfor %}
+{% endif %}
+{% endblock msg %}
+
+
+{% block content %}
+<div class="container">
+    <h2 class='my-4'>Update Profile</h2>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger">{{ field.errors|striptags }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+{% endblock content %}

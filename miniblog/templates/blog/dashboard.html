@@ -1,0 +1,66 @@
+{% extends "blog/base.html" %}
+
+{% block msg %}
+{% if messages %}
+    {% for msg in messages %}
+        <p {% if msg.tags %} class='alert alert-{{msg.tags}} mb-2' {% endif %}>{{msg}}</p>
+    {% endfor %}
+{% endif %}
+{% endblock msg %}
+
+
+{% block side %}
+
+<div class="col-sm-2 text-white my-5 text-center ">
+    <h4 class='my-4'>Profile</h4>
+    <h5>Name : {{user}}</h5>
+    {% for group in gp %}
+        <h5 class='my-3 text-start'>Group : {{group.name}}</h5>
+    {% endfor %}
+</div>
+
+{% endblock side %}
+
+
+{% block content %}
+<div class="col-sm-10">
+    <h3 class='text-white my-3'>Dashboard Page</h3>
+    <a href="{% url 'addpost' %}" class='btn btn-success'>Add New Post</a>
+    <h4 class="text-center alert alert-info mt-3">Show Post Information</h4>
+    {% if post %}
+        <table class="table tabel-hover bg-white">
+            <thead>
+                <tr class='text-center'>
+                    <th scope='col' style='width:2%'>ID</th>
+                    <th scope='col' style='width:28%'>Title</th>
+                    <th scope='col' style='width:55%'>Description</th>
+                    <th scope='col' style='width:15%'>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pt in post %}
+                    <tr>
+                        <th scope='row'>{{pt.id}}</th>
+                        <td class='text-center'>{{pt.title}}</td>
+                        <td class='text-center'>{{pt.description}}</td>
+                        <td class='text-center'>
+                            <a href="{% url 'updatepost' pt.id %}" class='btn btn-warning btn-sm'>Edit</a>
+                            {% if perms.blog.delete_post %} 
+                                <form action=" {% url 'delete' pt.id %} " method='POST' class='d-inline'>
+                                    {% csrf_token %}
+                                    <button class='btn btn-danger btn-sm'>Delete</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    {% endif %}
+    
+</div>
+{% endblock content %}
+
+
+
